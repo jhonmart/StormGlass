@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  server-express:
+    image: node:20-alpine
+    container_name: express-server
+    ports:
+      - "9080:8080"
+    volumes:
+      - ./:/app
+    user: ${USER_ID:-1000}
+    working_dir: /app
+    command: sh -c "yarn install && yarn start:dev"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/system/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    stdin_open: true
+    tty: true
+    mem_limit: 2g
+    mem_reservation: 1g
+    cpus: "2.00"
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+          cpus: "2.00"
+        reservations:
+          memory: 1g
