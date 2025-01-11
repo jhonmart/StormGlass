@@ -1,0 +1,38 @@
+name: Start project
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Check lint
+        run: yarn lint:check
+
+      - name: Check style
+        run: yarn style:check
+
+      - name: Run unitary test
+        run: yarn test:unit
+
+      - name: Run functional test
+        run: yarn test:functional
+
+      - name: Config test
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: coverage
+          retention-days: 3

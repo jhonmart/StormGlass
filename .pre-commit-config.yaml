@@ -1,0 +1,20 @@
+repos:
+  - repo: local
+    hooks:
+      - id: style
+        name: Run Prettier
+        entry: yarn style:check
+        language: node
+        types: [file]
+        files: \.(js|ts)$
+        pass_filenames: false
+        args: ["--check", "--ignore-unknown"]
+      
+      - id: lint
+        name: Run ESLint
+        entry: yarn lint:check
+        language: node
+        types: [file]
+        files: \.(js|ts)$
+        pass_filenames: false
+        args: ["--quiet"]

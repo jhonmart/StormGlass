@@ -1,5 +1,5 @@
 import { buildURL } from '@src/utils/fetch-url';
-import { AxiosStatic, isAxiosError, AxiosError } from 'axios';
+import { AxiosStatic, AxiosError } from 'axios';
 import {
   ForecastPoint,
   StormGlassForecastResponse,
@@ -31,7 +31,10 @@ export class StormGlass {
 
   constructor(protected request: AxiosStatic) {}
 
-  public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[] | void> {
+  public async fetchPoints(
+    lat: number,
+    lng: number,
+  ): Promise<ForecastPoint[] | void> {
     const URL_COMPLETE = buildURL(this.stormGlassAPIUrl, {
       lat,
       lng,
@@ -57,7 +60,7 @@ export class StormGlass {
         throw new ClientResponseError(
           `Error: ${JSON.stringify(axiosError.response.data)} Code: ${
             axiosError.response.status
-          }`
+          }`,
         );
       } else if (err instanceof Error) {
         throw new ClientResquestError(err.message);

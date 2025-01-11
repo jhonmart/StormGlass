@@ -49,7 +49,7 @@ describe('StormGlass client', () => {
     const stormGlass = new StormGlass(mockedAxios);
 
     await expect(stormGlass.fetchPoints(lat, lng)).rejects.toThrow(
-      'Unexpected error when trying to communicate to StormGlass: Network Error'
+      'Unexpected error when trying to communicate to StormGlass: Network Error',
     );
   });
 
@@ -62,7 +62,7 @@ describe('StormGlass client', () => {
     const stormGlass = new StormGlass(mockedAxios);
 
     await expect(stormGlass.fetchPoints(lat, lng)).rejects.toThrow(
-      'Unexpected error when trying to communicate to StormGlass: An unknown error occurred'
+      'Unexpected error when trying to communicate to StormGlass: An unknown error occurred',
     );
   });
 
@@ -80,13 +80,13 @@ describe('StormGlass client', () => {
       new FakeAxiosError({
         status: 429,
         data: { errors: ['Rate Limit reached'] },
-      })
+      }),
     );
 
     const stormGlass = new StormGlass(mockedAxios);
 
     await expect(stormGlass.fetchPoints(lat, lng)).rejects.toThrow(
-      'Unexpected error returned by the StormGlass service: Error: {"errors":["Rate Limit reached"]} Code: 429'
+      'Unexpected error returned by the StormGlass service: Error: {"errors":["Rate Limit reached"]} Code: 429',
     );
   });
 });
