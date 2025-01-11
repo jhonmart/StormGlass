@@ -32,10 +32,3 @@ jobs:
 
       - name: Run functional test
         run: yarn test:functional
-
-      - name: Config test
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifacts
-          path: coverage
-          retention-days: 3
