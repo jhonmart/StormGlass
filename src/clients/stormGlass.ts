@@ -1,10 +1,12 @@
 import { buildURL } from '@src/utils/fetch-url';
-import { AxiosStatic, AxiosError } from 'axios';
+import { AxiosError } from 'axios';
+import * as HTTPUtil from '@src/utils/request';
 import {
   ForecastPoint,
   StormGlassForecastResponse,
   StormGlassPoint,
 } from '@src/clients/stormGlassTypes';
+import config, { IConfig } from 'config';
 import { InternalError } from '@src/utils/errors/internal-error';
 
 export class ClientResquestError extends InternalError {
@@ -23,19 +25,20 @@ export class ClientResponseError extends InternalError {
   }
 }
 
+const StormGlassConfig: IConfig = config.get('App.resources.StormGlass');
+
 export class StormGlass {
-  readonly stormGlassAPIUrl = 'https://api.stormglass.io/v2';
   readonly stormGlassAPIParams =
     'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
   readonly stormGlassAPISource = 'noaa';
 
-  constructor(protected request: AxiosStatic) {}
+  constructor(protected request = new HTTPUtil.Request()) {}
 
   public async fetchPoints(
     lat: number,
     lng: number,
   ): Promise<ForecastPoint[] | void> {
-    const URL_COMPLETE = buildURL(this.stormGlassAPIUrl, {
+    const URL_COMPLETE = buildURL(StormGlassConfig.get('apiUrl'), {
       lat,
       lng,
       params: this.stormGlassAPIParams,
@@ -48,7 +51,7 @@ export class StormGlass {
         URL_COMPLETE,
         {
           headers: {
-            Authorization: 'fake-token',
+            Authorization: StormGlassConfig.get('apiToken'),
           },
         },
       );
@@ -56,10 +59,13 @@ export class StormGlass {
       return this.normalizeResponse(response.data);
     } catch (err) {
       const axiosError = err as AxiosError;
-      if (axiosError.response && axiosError.response.status) {
+      if (
+        HTTPUtil.Request.isRequestError(axiosError) &&
+        axiosError.response?.data
+      ) {
         throw new ClientResponseError(
-          `Error: ${JSON.stringify(axiosError.response.data)} Code: ${
-            axiosError.response.status
+          `Error: ${JSON.stringify(axiosError.response?.data)} Code: ${
+            axiosError.response?.status
           }`,
         );
       } else if (err instanceof Error) {
