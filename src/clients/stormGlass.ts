@@ -1,12 +1,12 @@
 import { buildURL } from '@src/utils/fetch-url';
 import { AxiosError } from 'axios';
 import * as HTTPUtil from '@src/utils/request';
+import { env } from 'node:process';
 import {
   ForecastPoint,
   StormGlassForecastResponse,
   StormGlassPoint,
 } from '@src/clients/stormGlassTypes';
-import config, { IConfig } from 'config';
 import { InternalError } from '@src/utils/errors/internal-error';
 
 export class ClientResquestError extends InternalError {
@@ -25,8 +25,6 @@ export class ClientResponseError extends InternalError {
   }
 }
 
-const StormGlassConfig: IConfig = config.get('App.resources.StormGlass');
-
 export class StormGlass {
   readonly stormGlassAPIParams =
     'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
@@ -38,7 +36,7 @@ export class StormGlass {
     lat: number,
     lng: number,
   ): Promise<ForecastPoint[] | void> {
-    const URL_COMPLETE = buildURL(StormGlassConfig.get('apiUrl'), {
+    const URL_COMPLETE = buildURL(env.STORM_GLASS_URL as string, {
       lat,
       lng,
       params: this.stormGlassAPIParams,
@@ -51,7 +49,7 @@ export class StormGlass {
         URL_COMPLETE,
         {
           headers: {
-            Authorization: StormGlassConfig.get('apiToken'),
+            Authorization: env.STORM_GLASS_TOKEN as string,
           },
         },
       );

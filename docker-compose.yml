@@ -1,6 +1,9 @@
 version: '3.9'
 
 services:
+  server-mongo:
+    image: mongo
+
   server-express:
     image: node:20-alpine
     container_name: express-server
@@ -10,13 +13,19 @@ services:
       - ./:/app
     user: ${USER_ID:-1000}
     working_dir: /app
-    command: sh -c "yarn install && yarn start:dev"
+    command: sh -c "yarn install && yarn test:functional --watchAll"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/system/health"]
       interval: 30s
       timeout: 3s
       retries: 3
       start_period: 10s
+    environment:
+      - STORM_GLASS_TOKEN=92f9abcd-d090-11ef-ab67-0242ac134573-94f9ac54-bb67-d010-11ef-0242ac130123
+      - STORM_GLASS_URL=https://api.stormglass.io/v2
+      - DATABASE_SOURCE=mongodb://server-mongo:27017/surf-forecast
+    depends_on:
+      - server-mongo
     stdin_open: true
     tty: true
     mem_limit: 2g
