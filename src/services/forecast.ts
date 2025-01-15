@@ -1,21 +1,7 @@
+import { Beach } from '@src/clients/models/beach';
 import { StormGlass } from '@src/clients/stormGlass';
 import { ForecastPoint } from '@src/clients/stormGlassTypes';
 import { InternalError } from '@src/utils/errors/internal-error';
-
-export enum BeachPosition {
-  S = 'S',
-  E = 'E',
-  W = 'W',
-  N = 'N',
-}
-
-export interface Beach {
-  name: string;
-  position: BeachPosition;
-  lat: number;
-  lng: number;
-  user: string;
-}
 
 export interface TimeForecast {
   time: string;

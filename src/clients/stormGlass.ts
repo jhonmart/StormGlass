@@ -36,13 +36,16 @@ export class StormGlass {
     lat: number,
     lng: number,
   ): Promise<ForecastPoint[] | void> {
-    const URL_COMPLETE = buildURL(env.STORM_GLASS_URL as string, {
-      lat,
-      lng,
-      params: this.stormGlassAPIParams,
-      source: this.stormGlassAPISource,
-      end: 1592113802,
-    });
+    const URL_COMPLETE = buildURL(
+      `${env.STORM_GLASS_URL}/weather/point` as string,
+      {
+        lat,
+        lng,
+        params: this.stormGlassAPIParams,
+        source: this.stormGlassAPISource,
+        end: 1592113802,
+      },
+    );
 
     try {
       const response = await this.request.get<StormGlassForecastResponse>(

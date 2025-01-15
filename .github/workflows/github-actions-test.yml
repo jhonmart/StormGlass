@@ -11,6 +11,11 @@ on:
 jobs:
   test-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      STORM_GLASS_TOKEN: 92f9abcd-d090-11ef-ab67-0242ac134573-94f9ac54-bb67-d010-11ef-0242ac130123
+      STORM_GLASS_URL: https://api.stormglass.io/v2
+      DATABASE_SOURCE: mongodb://server-mongo:27017/surf-forecast
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 18.x
