@@ -1,6 +1,7 @@
 import { Controller, Get } from '@overnightjs/core';
 import { Beach } from '@src/clients/models/beach';
 import { Forecast } from '@src/services/forecast';
+import { logger } from '@src/services/logger';
 import { Request, Response } from 'express';
 
 const forecast = new Forecast();
@@ -17,9 +18,14 @@ export class ForecastController {
       const forecastData = await forecast.processForecastForBeaches(beaches);
       res.status(200).send(forecastData);
     } catch (err) {
-      if (err instanceof Error)
-        res.status(500).send({ error: 'Something went wrong' });
-      else res.status(500).send({ error: 'An unknown error occurred' });
+      const error =
+        err instanceof Error ? err : new Error('An unknown error occurred');
+      res.status(500).send({ error: error.message });
+      logger.error({
+        message: 'Unhandled Error',
+        error: error.message,
+        stack: error.stack,
+      });
     }
   }
 }

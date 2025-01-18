@@ -1,0 +1,17 @@
+# ext:REST Client ID > humao.rest-client
+@host = http://localhost:9080
+
+
+### Create Beach
+POST {{host}}/beaches HTTP/1.1
+content-type: application/json
+
+{
+    "lat": -33.792726,
+    "lng": 151.289824,
+    "name": "Manly",
+    "position": "E"
+}
+
+### Get Forecast 
+GET {{host}}/forecast HTTP/1.1

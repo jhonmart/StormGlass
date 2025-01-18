@@ -7,6 +7,7 @@ import { Application } from 'express';
 import { SystemController } from './controllers/system';
 import * as database from './database';
 import { BeachesController } from './controllers/beaches';
+import { logMiddleware } from './services/logger';
 
 export class SetupServer extends Server {
   constructor(private port = 3000) {
@@ -21,6 +22,7 @@ export class SetupServer extends Server {
 
   private setupExpress(): void {
     this.app.use(bodyParser.json());
+    this.app.use(logMiddleware);
   }
 
   private setupControllers(): void {
@@ -44,5 +46,11 @@ export class SetupServer extends Server {
 
   public getApp(): Application {
     return this.app;
+  }
+
+  public start(): void {
+    this.app.listen(this.port, () => {
+      console.info('Server listening of port:', this.port);
+    });
   }
 }
