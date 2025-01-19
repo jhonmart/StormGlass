@@ -5,7 +5,7 @@ import {
   ForecastProcessingInternalError,
 } from '@src/services/forecast';
 import { expected as expectedResponse } from '@src/services/__test__/fixtures/forecast_response_data.json';
-import { Beach, BeachPosition } from '@src/clients/models/beach';
+import { Beach, BeachPosition } from '@src/models/beach';
 
 jest.mock('@src/clients/stormGlass');
 

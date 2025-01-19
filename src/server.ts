@@ -8,6 +8,7 @@ import { SystemController } from './controllers/system';
 import * as database from './database';
 import { BeachesController } from './controllers/beaches';
 import { logMiddleware } from './services/logger';
+import { UserController } from './controllers/users';
 
 export class SetupServer extends Server {
   constructor(private port = 3000) {
@@ -29,10 +30,12 @@ export class SetupServer extends Server {
     const forecastController = new ForecastController();
     const systemController = new SystemController();
     const beachesController = new BeachesController();
+    const userController = new UserController();
     this.addControllers([
       systemController,
       forecastController,
       beachesController,
+      userController,
     ]);
   }
 

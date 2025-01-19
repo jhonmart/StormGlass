@@ -1,5 +1,5 @@
 import { Controller, Get } from '@overnightjs/core';
-import { Beach } from '@src/clients/models/beach';
+import { Beach } from '@src/models/beach';
 import { Forecast } from '@src/services/forecast';
 import { logger } from '@src/services/logger';
 import { Request, Response } from 'express';

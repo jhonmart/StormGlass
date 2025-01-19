@@ -1,4 +1,4 @@
-import { Beach } from '@src/clients/models/beach';
+import { Beach } from '@src/models/beach';
 import { StormGlass } from '@src/clients/stormGlass';
 import { ForecastPoint } from '@src/clients/stormGlassTypes';
 import { InternalError } from '@src/utils/errors/internal-error';
