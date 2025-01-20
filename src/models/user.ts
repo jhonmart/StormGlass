@@ -1,10 +1,16 @@
 import mongoose, { Document } from 'mongoose';
+import { logger } from '@src/services/logger';
+import AuthService from '@src/services/auth';
 
 export interface User {
   _id?: string;
   name: string;
   email: string;
   password: string;
+}
+
+export enum CUSTOM_VALIDATION {
+  DUPLICATED = 'DUPLICATED',
 }
 
 interface UserModel extends Omit<User, '_id'>, Document {}
@@ -29,5 +35,30 @@ const schema = new mongoose.Schema<UserModel>(
     },
   },
 );
+
+schema.path('email').validate(
+  async (email: string) => {
+    const emailCount = await mongoose.models.User.countDocuments({ email });
+    return !emailCount;
+  },
+  'already exists in the database.',
+  CUSTOM_VALIDATION.DUPLICATED,
+);
+
+schema.pre<UserModel>('save', async function (): Promise<void> {
+  if (!this.password || !this.isModified('password')) {
+    return;
+  }
+  try {
+    const hashedPassword = await AuthService.hashedPassword(this.password);
+    this.password = hashedPassword;
+  } catch (err: unknown) {
+    logger.error({
+      message: 'Error hashing the password',
+      user: this.email,
+      err,
+    });
+  }
+});
 
 export const User = mongoose.model('User', schema);

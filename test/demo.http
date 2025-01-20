@@ -15,3 +15,18 @@ content-type: application/json
 
 ### Get Forecast 
 GET {{host}}/forecast HTTP/1.1
+
+
+### Create user
+POST {{host}}/users HTTP/1.1
+content-type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john@mail.com",
+    "password": "1234"
+}
+
+
+### Test health check
+GET {{host}}/system/health HTTP/1.1

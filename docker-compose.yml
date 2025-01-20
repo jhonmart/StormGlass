@@ -13,8 +13,7 @@ services:
       - ./:/app
     user: ${USER_ID:-node}
     working_dir: /app
-    entrypoint: /app/entrypoint.sh
-    command: sh -c "yarn install && yarn start"
+    command: sh -c "yarn install && yarn start:dev"
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/system/health"]
       interval: 30s
@@ -24,10 +23,10 @@ services:
     secrets:
       - storm-glass-api-key
     environment:
-      - STORM_GLASS_URL=https://api.stormglass.io/v2
-      - DATABASE_SOURCE=mongodb://server-mongo:27017/surf-forecast
-      - PORT=3000
-      - NODE_ENV=dev
+      STORM_GLASS_URL: https://api.stormglass.io/v2
+      DATABASE_SOURCE: mongodb://server-mongo:27017/surf-forecast
+      PORT: 3000
+      NODE_ENV: dev
     depends_on:
       - server-mongo
     restart: on-failure

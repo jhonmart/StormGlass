@@ -1,14 +1,21 @@
-import { Controller, Get } from '@overnightjs/core';
 import { Beach } from '@src/models/beach';
 import { Forecast } from '@src/services/forecast';
 import { logger } from '@src/services/logger';
-import { Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 
 const forecast = new Forecast();
 
-@Controller('forecast')
 export class ForecastController {
-  @Get('')
+  public router: Router;
+
+  constructor() {
+    this.router = Router();
+    this.initializeRoutes();
+  }
+
+  private initializeRoutes(): void {
+    this.router.get('', this.getForescatForLoggedUser);
+  }
   public async getForescatForLoggedUser(
     _: Request,
     res: Response,

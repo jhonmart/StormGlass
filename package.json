@@ -25,6 +25,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/axios": "^0.14.4",
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/module-alias": "^2.0.4",
@@ -44,8 +45,8 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "@overnightjs/core": "^1.7.6",
     "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "express": "^4.21.2",
     "module-alias": "^2.2.3",

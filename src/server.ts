@@ -1,18 +1,21 @@
 import bodyParser from 'body-parser';
-import { Server } from '@overnightjs/core';
+import express, { Application } from 'express';
 
 import './utils/module-alias';
 import { ForecastController } from './controllers/forecast';
-import { Application } from 'express';
 import { SystemController } from './controllers/system';
-import * as database from './database';
 import { BeachesController } from './controllers/beaches';
-import { logMiddleware } from './services/logger';
+import { logger, logMiddleware } from './services/logger';
 import { UserController } from './controllers/users';
+import * as database from './database';
 
-export class SetupServer extends Server {
-  constructor(private port = 3000) {
-    super();
+export class SetupServer {
+  private app: Application;
+  private port: number;
+
+  constructor(port = 3000) {
+    this.app = express();
+    this.port = port;
   }
 
   public async init(): Promise<void> {
@@ -31,12 +34,11 @@ export class SetupServer extends Server {
     const systemController = new SystemController();
     const beachesController = new BeachesController();
     const userController = new UserController();
-    this.addControllers([
-      systemController,
-      forecastController,
-      beachesController,
-      userController,
-    ]);
+
+    this.app.use('/system', systemController.router);
+    this.app.use('/forecast', forecastController.router);
+    this.app.use('/beaches', beachesController.router);
+    this.app.use('/users', userController.router);
   }
 
   private async databaseSetup(): Promise<void> {
@@ -53,7 +55,10 @@ export class SetupServer extends Server {
 
   public start(): void {
     this.app.listen(this.port, () => {
-      console.info('Server listening of port:', this.port);
+      logger.info({
+        message: 'Server listening',
+        port: this.port,
+      });
     });
   }
 }

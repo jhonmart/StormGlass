@@ -48,7 +48,6 @@ export class StormGlass {
     );
 
     try {
-      console.log(env.STORM_GLASS_TOKEN);
       const response = await this.request.get<StormGlassForecastResponse>(
         URL_COMPLETE,
         {

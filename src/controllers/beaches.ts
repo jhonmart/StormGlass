@@ -1,11 +1,19 @@
-import { Controller, Post } from '@overnightjs/core';
+import { Router, Request, Response } from 'express';
 import { Beach } from '@src/models/beach';
-import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 
-@Controller('beaches')
 export class BeachesController {
-  @Post('')
+  public router: Router;
+
+  constructor() {
+    this.router = Router();
+    this.initializeRoutes();
+  }
+
+  private initializeRoutes(): void {
+    this.router.post('', this.create);
+  }
+
   public async create(req: Request, res: Response): Promise<void> {
     try {
       const beach = new Beach(req.body);
